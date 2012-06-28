@@ -10,3 +10,6 @@ root {
     display: block;
 }
 
+canvas {
+    cursor: none;
+}
