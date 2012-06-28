@@ -1,0 +1,9 @@
+################################################################################################
+                                    instructions:
+################################################################################################
+
+1. upload your whole webGL directory into data,
+
+2. the script will automatically parse the directory and include the js files and output xml file automatically
+
+3. repeat

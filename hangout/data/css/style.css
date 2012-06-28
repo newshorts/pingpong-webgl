@@ -1,0 +1,15 @@
+/* 
+    Document   : style
+    Created on : Jun 27, 2012, 1:19:58 PM
+    Author     : newe1344
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+canvas {
+    cursor: none;
+}

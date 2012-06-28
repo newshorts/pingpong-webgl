@@ -1,0 +1,153 @@
+<!-- 
+
+Author: Mike Newell © 2012
+
+Documentation for THREE.js here: http://www.staunsholm.dk/THREE/jsdoc/
+
+Other ideas for hangout games - zombies vs cow or blog tag with friends.
+
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+    </head>
+    <body>
+        <div id="wrap"></div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src="js/Three.js"></script>
+        <script src="js/ball.js"></script>
+        <script>
+            
+            var camera, scene, renderer,
+                boxGeometry, ballGeometry, 
+                mouseGeometry, material, mesh,
+                imageCanvas, context, textureCanvas,
+                materialCanvas, ground, meshCanvas;
+            
+            var mouseX = 0, mouseY = 0, paddleBounds = 400;
+            
+            var winner = document.createEvent('Event');  
+                winner.initEvent('winner', true, true);
+            
+            var _bounds = {
+                x: window.innerWidth/2,
+                y: window.innerHeight/2,
+                z: 1200
+            };
+            
+            var b = new Ball(_bounds);
+            
+            init();
+            animate();
+
+            function init() {
+                
+                scene = new THREE.Scene();
+                scene.fog = new THREE.Fog( 0x000000, 1500, 4000);
+
+                camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+                camera.rotation.z = Math.PI;
+                camera.position.z = window.innerHeight * 1.07;
+                scene.add( camera );
+                
+                // GROUND
+                // TODO add ground
+                
+//                imageCanvas = document.createElement("canvas");
+//                context = imageCanvas.getContext('2d');
+//                
+//                imageCanvas.width = imageCanvas.height = 128;
+//                
+//                context.fillStyle = "#444";
+//                context.fillRect(0,0,128,128);
+//                
+//                context.fillStyle = '#fff';
+//                context.fillRect(0,0,64,64);
+//                context.fillRect(64,64,0,0);
+//                
+//                textureCanvas = new THREE.Texture(imageCanvas, THREE.UVMapping, THREE.RepeatWrapping, THREE.RepeatWrapping);
+//                materialCanvas = new THREE.MeshBasicMaterial({ map: textureCanvas });
+//                    
+//                textureCanvas.needsUpdate = true;
+//                textureCanvas.repeat.set( 1000,1000 );
+//                
+//                ground = new THREE.PlaneGeometry( 100, 100 );
+//                
+//                meshCanvas = new THREE.Mesh(ground, materialCanvas);
+//                meshCanvas.scale.set(1000,1000,1000);
+                
+                // BOX
+                
+                boxGeometry = new THREE.CubeGeometry( _bounds.x, _bounds.y, _bounds.z );
+                boxMaterial = new THREE.MeshBasicMaterial( {color: 0x000000, wireframe: true } );
+                room = new THREE.Mesh( boxGeometry, boxMaterial );
+                scene.add( room );
+                
+                // BALL
+                
+                ballGeometry = new THREE.SphereGeometry( 50, 32, 16 );
+                ballMaterial = new THREE.MeshBasicMaterial( {color: 0xFFaa00, wireframe: true } );
+                ball = new THREE.Mesh( ballGeometry, ballMaterial );
+                scene.add( ball );
+                
+                // MOUSE
+                
+                mouseGeometry = new THREE.CubeGeometry( paddleBounds, paddleBounds, 10 );
+                mouseMaterial = new THREE.MeshBasicMaterial( {color: 0x00aaFF, wireframe: true } );
+                mouse = new THREE.Mesh( mouseGeometry, mouseMaterial );
+                scene.add( mouse );
+                
+                var dLight = new THREE.PointLight(0xFFFFFF);
+                dLight.position.set(0,1000,0);
+                
+                scene.add(dLight);
+                
+                renderer = new THREE.WebGLRenderer();
+                renderer.setSize( window.innerWidth, window.innerHeight );
+                renderer.setClearColor(scene.fog.color, 1);
+                renderer.autoClear = false;
+
+                document.body.appendChild( renderer.domElement );
+                
+                window.addEventListener('mousemove', updateMouse, false);
+
+            }
+
+            function animate() {
+
+                // note: three.js includes requestAnimationFrame shim
+                requestAnimationFrame( animate );
+                render();
+
+            }
+
+            function render() {
+                
+                mouse.position.set(-(mouseX - _bounds.x), (mouseY - _bounds.y), (_bounds.z * 0.15));
+                
+                var pos = b.update();
+                ball.position.set(pos.x, pos.y, pos.z);
+                ball.rotation.x += 0.01;
+                ball.rotation.y += 0.02;
+
+                renderer.render( scene, camera );
+
+            }
+            
+            function updateMouse(evt) {
+//                console.log(evt.x);
+                
+                mouseX = evt.x;
+                mouseY = evt.y;
+            }
+            
+            window.addEventListener('winner', function(evt) {
+                console.log(evt);
+            }, false);
+            
+        </script>
+    </body>
+</html>
