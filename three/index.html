@@ -4,6 +4,8 @@ Author: Mike Newell © 2012
 
 Documentation for THREE.js here: http://www.staunsholm.dk/THREE/jsdoc/
 
+Other ideas for hangout games - zombies vs cow or blog tag with friends.
+
 -->
 <!DOCTYPE html>
 <html>
@@ -25,7 +27,7 @@ Documentation for THREE.js here: http://www.staunsholm.dk/THREE/jsdoc/
                 imageCanvas, context, textureCanvas,
                 materialCanvas, ground, meshCanvas;
             
-            var mouseX = 0, mouseY = 0;
+            var mouseX = 0, mouseY = 0, paddleBounds = 400;
             
             var winner = document.createEvent('Event');  
                 winner.initEvent('winner', true, true);
@@ -48,7 +50,7 @@ Documentation for THREE.js here: http://www.staunsholm.dk/THREE/jsdoc/
 
                 camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
                 camera.rotation.z = Math.PI;
-                camera.position.z = 800;
+                camera.position.z = window.innerHeight * 1.07;
                 scene.add( camera );
                 
                 // GROUND
@@ -93,7 +95,7 @@ Documentation for THREE.js here: http://www.staunsholm.dk/THREE/jsdoc/
                 
                 // MOUSE
                 
-                mouseGeometry = new THREE.CubeGeometry( 300, 300, 10 );
+                mouseGeometry = new THREE.CubeGeometry( paddleBounds, paddleBounds, 10 );
                 mouseMaterial = new THREE.MeshBasicMaterial( {color: 0x00aaFF, wireframe: true } );
                 mouse = new THREE.Mesh( mouseGeometry, mouseMaterial );
                 scene.add( mouse );
@@ -124,7 +126,7 @@ Documentation for THREE.js here: http://www.staunsholm.dk/THREE/jsdoc/
 
             function render() {
                 
-                mouse.position.set(-(mouseX - _bounds.x), (mouseY - _bounds.y), (_bounds.z * 0.36));
+                mouse.position.set(-(mouseX - _bounds.x), (mouseY - _bounds.y), (_bounds.z * 0.15));
                 
                 var pos = b.update();
                 ball.position.set(pos.x, pos.y, pos.z);

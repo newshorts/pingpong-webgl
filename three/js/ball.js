@@ -60,8 +60,6 @@ var Ball = function(bnds) {
 
         if(z > bounds.z/2) {
             
-            var paddleBounds = 300;
-            
             var paddleX = (-(mouseX - Math.abs(bounds.x)))*0.36,
                 paddleY = (mouseY - bounds.y);
                 
@@ -69,7 +67,6 @@ var Ball = function(bnds) {
                 lowerX = paddleX - (paddleBounds/2),
                 upperY = paddleY + (paddleBounds/2),
                 lowerY = paddleY - (paddleBounds/2);
-                
                 
             if((x < upperX && x > lowerX) && (y < upperY && y > lowerY)) {
                 window.dispatchEvent(winner);
