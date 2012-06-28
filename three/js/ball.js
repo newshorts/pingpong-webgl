@@ -9,7 +9,7 @@ var Ball = function(bnds) {
     var velocity = {
         x: 1,
         y: 1,
-        z: 20
+        z: -20
     };
 
     var x = 20,
@@ -72,10 +72,11 @@ var Ball = function(bnds) {
                 
                 
             if((x < upperX && x > lowerX) && (y < upperY && y > lowerY)) {
-                console.log('winner');
+                window.dispatchEvent(winner);
+                velocity.z *= -1;
             }
             
-            velocity.z *= -1;
+            
         }
         
         if(z < -(bounds.z/2)) {

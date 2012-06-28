@@ -18,11 +18,17 @@ Documentation for THREE.js here: http://www.staunsholm.dk/THREE/jsdoc/
         <script src="js/Three.js"></script>
         <script src="js/ball.js"></script>
         <script>
-
+            
             var camera, scene, renderer,
-            boxGeometry, ballGeometry, mouseGeometry, material, mesh;
+                boxGeometry, ballGeometry, 
+                mouseGeometry, material, mesh,
+                imageCanvas, context, textureCanvas,
+                materialCanvas, ground, meshCanvas;
             
             var mouseX = 0, mouseY = 0;
+            
+            var winner = document.createEvent('Event');  
+                winner.initEvent('winner', true, true);
             
             var _bounds = {
                 x: window.innerWidth/2,
@@ -36,23 +42,56 @@ Documentation for THREE.js here: http://www.staunsholm.dk/THREE/jsdoc/
             animate();
 
             function init() {
-
+                
                 scene = new THREE.Scene();
+                scene.fog = new THREE.Fog( 0x000000, 1500, 4000);
 
                 camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
                 camera.rotation.z = Math.PI;
                 camera.position.z = 800;
                 scene.add( camera );
                 
+                // GROUND
+                // TODO add ground
+                
+//                imageCanvas = document.createElement("canvas");
+//                context = imageCanvas.getContext('2d');
+//                
+//                imageCanvas.width = imageCanvas.height = 128;
+//                
+//                context.fillStyle = "#444";
+//                context.fillRect(0,0,128,128);
+//                
+//                context.fillStyle = '#fff';
+//                context.fillRect(0,0,64,64);
+//                context.fillRect(64,64,0,0);
+//                
+//                textureCanvas = new THREE.Texture(imageCanvas, THREE.UVMapping, THREE.RepeatWrapping, THREE.RepeatWrapping);
+//                materialCanvas = new THREE.MeshBasicMaterial({ map: textureCanvas });
+//                    
+//                textureCanvas.needsUpdate = true;
+//                textureCanvas.repeat.set( 1000,1000 );
+//                
+//                ground = new THREE.PlaneGeometry( 100, 100 );
+//                
+//                meshCanvas = new THREE.Mesh(ground, materialCanvas);
+//                meshCanvas.scale.set(1000,1000,1000);
+                
+                // BOX
+                
                 boxGeometry = new THREE.CubeGeometry( _bounds.x, _bounds.y, _bounds.z );
                 boxMaterial = new THREE.MeshBasicMaterial( {color: 0x000000, wireframe: true } );
                 room = new THREE.Mesh( boxGeometry, boxMaterial );
                 scene.add( room );
                 
+                // BALL
+                
                 ballGeometry = new THREE.SphereGeometry( 50, 32, 16 );
                 ballMaterial = new THREE.MeshBasicMaterial( {color: 0xFFaa00, wireframe: true } );
                 ball = new THREE.Mesh( ballGeometry, ballMaterial );
                 scene.add( ball );
+                
+                // MOUSE
                 
                 mouseGeometry = new THREE.CubeGeometry( 300, 300, 10 );
                 mouseMaterial = new THREE.MeshBasicMaterial( {color: 0x00aaFF, wireframe: true } );
@@ -66,6 +105,8 @@ Documentation for THREE.js here: http://www.staunsholm.dk/THREE/jsdoc/
                 
                 renderer = new THREE.WebGLRenderer();
                 renderer.setSize( window.innerWidth, window.innerHeight );
+                renderer.setClearColor(scene.fog.color, 1);
+                renderer.autoClear = false;
 
                 document.body.appendChild( renderer.domElement );
                 
@@ -100,6 +141,10 @@ Documentation for THREE.js here: http://www.staunsholm.dk/THREE/jsdoc/
                 mouseX = evt.x;
                 mouseY = evt.y;
             }
+            
+            window.addEventListener('winner', function(evt) {
+                console.log(evt);
+            }, false);
             
         </script>
     </body>
