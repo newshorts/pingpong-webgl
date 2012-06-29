@@ -12,4 +12,7 @@ root {
 
 canvas {
     cursor: none;
+    position: relative;
+    left: 50%;
+    margin-left: -350px;
 }

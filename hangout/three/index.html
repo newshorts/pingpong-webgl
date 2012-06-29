@@ -32,8 +32,8 @@ Other ideas for hangout games - zombies vs cow or blog tag with friends.
             
             var mouseX = 0, mouseY = 0, paddleBounds = 400;
             
-            var winner = document.createEvent('Event');  
-                winner.initEvent('winner', true, true);
+//            var winner = document.createEvent('Event');  
+//                winner.initEvent('winner', true, true);
             
             // bounds were window.innerWidth/2 and innerHeight/2 but I changed it to min dimensions in a hangout
             var _bounds = {
@@ -111,7 +111,7 @@ Other ideas for hangout games - zombies vs cow or blog tag with friends.
                 scene.add(dLight);
                 
                 renderer = new THREE.WebGLRenderer();
-                renderer.setSize( _bounds.x*2, _bounds.y*2 );
+                renderer.setSize( _bounds.x, _bounds.y );
                 renderer.setClearColor(scene.fog.color, 1);
                 renderer.autoClear = false;
 
@@ -131,8 +131,8 @@ Other ideas for hangout games - zombies vs cow or blog tag with friends.
 
             function render() {
                 
-                mouse.position.set(-(mouseX - _bounds.x), (mouseY - _bounds.y), (_bounds.z * 0.15));
-                
+                mouse.position.set(-(mouseX - _bounds.x), (mouseY - _bounds.y/2), (_bounds.z * 0.15));
+
                 var pos = b.update();
                 ball.position.set(pos.x, pos.y, pos.z);
                 ball.rotation.x += 0.01;
@@ -149,10 +149,10 @@ Other ideas for hangout games - zombies vs cow or blog tag with friends.
                 mouseY = evt.y;
             }
             
-            window.addEventListener('winner', function(evt) {
-                console.log('winner');
-//                console.log(evt);
-            }, false);
+//            window.addEventListener('winner', function(evt) {
+//                console.log('winner');
+////                console.log(evt);
+//            }, false);
             
         </script>
     </body>

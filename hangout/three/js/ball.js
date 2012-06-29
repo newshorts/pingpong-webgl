@@ -67,17 +67,52 @@ var Ball = function(bnds) {
                 lowerX = paddleX - (paddleBounds/2),
                 upperY = paddleY + (paddleBounds/2),
                 lowerY = paddleY - (paddleBounds/2);
+            
+            // just playing x - dont worry about y: (y < upperY && y > lowerY)
+            if((x < upperX && x > lowerX)) {
+//                window.dispatchEvent(winner);
+                if(gameOn) {
+                    
+                    var pid = gapi.hangout.getParticipantId() || 'wall';
+                    gapi.hangout.data.setValue('action', 'hit');
+                    gapi.hangout.data.setValue('player', pid);
+                    
+                }
                 
-            if((x < upperX && x > lowerX) && (y < upperY && y > lowerY)) {
-                window.dispatchEvent(winner);
                 velocity.z *= -1;
+                
+            } else {
+                // we lost, reset the game
+                
+                if(gameOn) {
+                    
+                    var pid = gapi.hangout.getParticipantId() || 'wall';
+                    gapi.hangout.data.setValue('action', 'miss');
+                    gapi.hangout.data.setValue('player', pid);
+                    
+                }
+                
             }
             
             
         }
         
         if(z < -(bounds.z/2)) {
-            velocity.z *= -1;
+            
+            // just for debugging, remove when I test with real players
+            if(gameOn) {
+                gapi.hangout.data.setValue('action', 'hit');
+                gapi.hangout.data.setValue('player', 'wall');
+                
+                var st = gapi.hangout.data.getState();
+                
+                console.dir(st);
+                
+                if(st.action === "hit") {
+                    velocity.z *= -1;
+                }
+            }
+            
         }
 
     }
