@@ -8,9 +8,17 @@
         gapi.hangout.onApiReady.add(function(evt) {
             startMyApp(evt);
             
+            // set the events
+            gapi.hangout.data.onMessageReceived.add(newMessage);
+            gapi.hangout.data.onStateChanged.add(newState);
+            
             setInterval(function() {
-                
+                gapi.hangout.data.sendMessage('This is a message sent from the interval');
             }, 2000);
+            
+            setInterval(function() {
+                gapi.hangout.data.setValue('key', 'value from interval');
+            }, 3000);
             
         });
     });
@@ -21,23 +29,23 @@ var startMyApp = function(evt) {
 };
 
 var newMessage = function(evt) {
-    console.log('logging event: ' + evt);
+    console.log('logging message event: ');
+    console.dir(evt);
     
-    sendMessage('This is a new message');
+    gapi.hangout.data.sendMessage('This is a new message');
 };
 
 var newState = function(evt) {
     
-    console.log('logging event: ' + evt);
+    console.log('logging new state event: ');
+    console.dir(evt);
     
-    var st = getState();
+    var st = gapi.hangout.data.getState();
     
-    console.log('logging old state: ' + st);
+    console.log('logging old state from "getState": ');
+    console.dir(st);
     
-    setValue('key', 'value');
+    gapi.hangout.data.setValue('key', 'value');
     
 };
 
-// set the events
-onMessageReceived.add(newMessage);
-onStateChanged.add(newState);
