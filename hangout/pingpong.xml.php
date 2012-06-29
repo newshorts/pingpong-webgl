@@ -5,16 +5,32 @@
  */
 
 if(isset($_GET['hangout'])) {
-    $index = file_get_contents('data/index.html');
+    $index = file_get_contents('three/index.html');
     
-    $three = file_get_contents('data/js/Three.js');
+    $style = file_get_contents('three/css/style.css');
     
-    $ball = file_get_contents('data/js/ball.js');
+    $app = file_get_contents('three/js/app.js');
     
-    $replace = array('<script src="js/Three.js"></script>' => $three, '<script src="js/ball.js"></script>' => $ball);
+    $three = file_get_contents('three/js/Three.js');
+    
+    $ball = file_get_contents('three/js/ball.js');
+    
+    $replace = array(   '<link rel="stylesheet" type="text/css" href="css/style.css" />' => $style, 
+                        '<script src="js/app.js"></script>' => $app, 
+                        '<script src="js/Three.js"></script>' => $three, 
+                        '<script src="js/ball.js"></script>' => $ball
+                    );
     
     foreach($replace as $key => $value) {
-        $index = str_replace($key, '<script>'.$value.'</script>', $index);
+        
+        if(strpos($key, '.css')) {
+            $index = str_replace($key, '<style>'.$value.'</style>', $index);
+        }
+        
+        if(strpos($key, '.js')) {
+            $index = str_replace($key, '<script>'.$value.'</script>', $index);
+        }
+        
     }
     
     header ("Content-Type:text/xml");
@@ -23,13 +39,13 @@ if(isset($_GET['hangout'])) {
     
         <?xml version="1.0" encoding="UTF-8" ?>
         <Module>
-            <ModulePrefs title="Round Robin">
+            <ModulePrefs title="pingpong">
                 <Require feature="rpc"/>
                 <Require feature="views"/>
             </ModulePrefs>
             <Content type="html">
                 <![CDATA[
-                <script src="//hangoutsapi.talkgadget.google.com/hangouts/_/api/hangout.js?v=1.1"></script>
+                <script src="//talkgadget.google.com/hangouts/_/api/hangout.js?v=1.1"></script>
                 
                 $index
     

@@ -17,8 +17,11 @@ Other ideas for hangout games - zombies vs cow or blog tag with friends.
     <body>
         <div id="wrap"></div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <!-- REMINDER: if I change these paths I must also update the xml output script in the ../base of this directory -->
+        <script src="js/app.js"></script>
         <script src="js/Three.js"></script>
         <script src="js/ball.js"></script>
+        <!-- REMINDER: if I change these paths I must also update the xml output script in the ../base of this directory -->
         <script>
             
             var camera, scene, renderer,
@@ -32,9 +35,10 @@ Other ideas for hangout games - zombies vs cow or blog tag with friends.
             var winner = document.createEvent('Event');  
                 winner.initEvent('winner', true, true);
             
+            // bounds were window.innerWidth/2 and innerHeight/2 but I changed it to min dimensions in a hangout
             var _bounds = {
-                x: window.innerWidth/2,
-                y: window.innerHeight/2,
+                x: 700,
+                y: 460,
                 z: 1200
             };
             
@@ -48,9 +52,10 @@ Other ideas for hangout games - zombies vs cow or blog tag with friends.
                 scene = new THREE.Scene();
                 scene.fog = new THREE.Fog( 0x000000, 1500, 4000);
 
-                camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+                camera = new THREE.PerspectiveCamera( 75, _bounds.x / _bounds.y, 1, 10000 );
                 camera.rotation.z = Math.PI;
-                camera.position.z = window.innerHeight * 1.07;
+//                camera.position.z = _bounds.x * 1.07;
+                camera.position.z = 1000;
                 scene.add( camera );
                 
                 // GROUND
@@ -106,7 +111,7 @@ Other ideas for hangout games - zombies vs cow or blog tag with friends.
                 scene.add(dLight);
                 
                 renderer = new THREE.WebGLRenderer();
-                renderer.setSize( window.innerWidth, window.innerHeight );
+                renderer.setSize( _bounds.x*2, _bounds.y*2 );
                 renderer.setClearColor(scene.fog.color, 1);
                 renderer.autoClear = false;
 
