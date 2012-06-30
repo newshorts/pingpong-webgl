@@ -33,6 +33,3 @@ var newState = function(evt) {
 //    console.dir(st);
     
 };
-
-
-

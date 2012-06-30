@@ -87,30 +87,36 @@ var Ball = function(bnds) {
                 if(gameOn) {
                     
                     var pid = gapi.hangout.getParticipantId() || 'wall';
-                    gapi.hangout.data.setValue('action', 'miss');
-                    gapi.hangout.data.setValue('player', pid);
+                    
+                    if(st.action != "hit" && st.player != pid) {
+                        gapi.hangout.data.setValue('action', 'miss');
+                        gapi.hangout.data.setValue('player', pid);
+                    }
                     
                 }
                 
+//                velocity.z *= -1;
+                
             }
-            
-            
+
         }
-        
+
         if(z < -(bounds.z/2)) {
-            
+
             // just for debugging, remove when I test with real players
             if(gameOn) {
-                gapi.hangout.data.setValue('action', 'hit');
-                gapi.hangout.data.setValue('player', 'wall');
-                
+
                 var st = gapi.hangout.data.getState();
-                
+
                 console.dir(st);
-                
-                if(st.action === "hit") {
-                    velocity.z *= -1;
+
+                if(st.action != "hit" && st.player != "wall") {
+                    gapi.hangout.data.setValue('action', 'hit');
+                    gapi.hangout.data.setValue('player', 'wall');
                 }
+
+                velocity.z *= -1;
+
             }
             
         }
