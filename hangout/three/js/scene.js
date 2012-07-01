@@ -47,20 +47,21 @@ var Scene = Class.extend({
         this.camera = new THREE.PerspectiveCamera( 75, this.bounds.x / this.bounds.y, 1, 10000 );
         this.camera.rotation.z = Math.PI;
 //                camera.position.z = _bounds.x * 1.07;
+//        this.camera.position.y = -500;
         this.camera.position.z = 1000;
         this.scene.add( this.camera );
         
         // BOX
                 
         this.boxGeometry = new THREE.CubeGeometry( this.bounds.x, this.bounds.y, this.bounds.z );
-        this.boxMaterial = new THREE.MeshBasicMaterial( {color: 0x000000, wireframe: true} );
+        this.boxMaterial = new THREE.MeshLambertMaterial( {color: 0x000000, wireframe: true} );
         this.room = new THREE.Mesh( this.boxGeometry, this.boxMaterial );
         this.scene.add( this.room );
         
         // FLOOR
         
         this.floorGeometry = new THREE.CubeGeometry( this.bounds.x, 10, this.bounds.z );
-        this.floorMaterial = new THREE.MeshBasicMaterial({map:THREE.ImageUtils.loadTexture('images/pingpongtable.jpg')});
+        this.floorMaterial = new THREE.MeshBasicMaterial({map:THREE.ImageUtils.loadTexture('images/pingpongtable.jpg'), shading: THREE.SmoothShading, overdraw: true});
         this.floorMaterial.map.needsUpdate = true;
         this.floor = new THREE.Mesh( this.floorGeometry, this.floorMaterial );
         this.floor.overdraw = true;
@@ -71,7 +72,7 @@ var Scene = Class.extend({
         // BALL
 
         this.ballGeometry = new THREE.SphereGeometry( this.radius, 32, 16 );
-        this.ballMaterial = new THREE.MeshLambertMaterial( {color: 0xffffff, shading: THREE.FlatShading, overdraw: true} );
+        this.ballMaterial = new THREE.MeshLambertMaterial( {color: 0xffffff, shading: THREE.SmoothShading, overdraw: true} );
         this.ball = new THREE.Mesh( this.ballGeometry, this.ballMaterial );
         this.scene.add( this.ball );
 
@@ -89,7 +90,7 @@ var Scene = Class.extend({
         this.scene.add( overheadLight );
         
         var userLight = new THREE.DirectionalLight( 0xffffff, 1 );
-        userLight.position.set(0,0,this.bounds.z);
+        userLight.position.set(0,-100,this.bounds.z);
         this.scene.add( userLight );
 
         var tableReflection = new THREE.PointLight(0x0c599f,.7,0);

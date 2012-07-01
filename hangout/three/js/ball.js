@@ -61,7 +61,7 @@ var Ball = Class.extend({
     start: function() {
         this.velocity.x = -1,
         this.velocity.y = 1,
-        this.velocity.z = Math.floor(Math.random()*20 + 1);
+        this.velocity.z = 20;
     },
     pause: function() {
         this.velocity.x = 0,
