@@ -1,0 +1,78 @@
+<!-- 
+
+Author: Mike Newell © 2012
+
+Documentation for THREE.js here: http://www.staunsholm.dk/THREE/jsdoc/
+
+Other ideas for hangout games - zombies vs cow or blog tag with friends.
+
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+    </head>
+    <body>
+        <div id="wrap">
+            <button id="start">Start</button>
+            <button id="stop">Stop</button>
+            <button id="pause">Pause</button>
+        </div>
+        <div id="countdown"></div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src="js/three.js"></script>
+        <!-- REMINDER: if I change these paths I must also update the xml output script in the ../base of this directory -->
+        <script src="js/class.js"></script>
+        <script src="js/game.js"></script>
+        <script src="js/scene.js"></script>
+        <script src="js/ball.js"></script>
+        <script>
+            var mouseX, mouseY;
+            
+            var bounds = {
+                x: 700,
+                y: 460,
+                z: 1200
+            };
+
+            var paddleBounds = 400;
+
+            var game = new Game();
+            var scene = new Scene(bounds);
+            var ball = new Ball(bounds, paddleBounds, scene.radius);
+            
+            (function($) {
+                $(window).load(function() {
+                    // start the app here
+
+                    function animate() {
+                        // note: three.js includes requestAnimationFrame shim
+                        requestAnimationFrame( animate );
+                        render();
+                    }
+
+                    function render() {
+//                        var mouseX = mouseX,
+//                            mouseY = mouseY;
+        
+                        scene.mouse.position.set(-(mouseX - scene.bounds.x), (mouseY - scene.bounds.y/2), (scene.bounds.z * 0.50));
+                        var pos = ball.getUpdate();
+                        scene.updateBall(pos);
+                        scene.renderer.render( scene.scene, scene.camera );
+                        
+                    }
+
+                    animate();
+                    
+                    game.countdown = 5;
+                    game.startCountdown();
+                    
+                });
+            })(jQuery);
+                    
+            
+        </script>
+    </body>
+</html>

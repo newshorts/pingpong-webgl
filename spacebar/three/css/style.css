@@ -1,0 +1,49 @@
+/* 
+    Document   : style
+    Created on : Jun 27, 2012, 1:19:58 PM
+    Author     : newe1344
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+@import url(http://fonts.googleapis.com/css?family=Bevan);
+
+root { 
+    display: block;
+}
+
+body {
+    background-color: white;
+    font-family: 'Bevan', serif;
+    font-size: 16.5px;
+    color: #2E2E2E;
+    text-shadow: 5px 5px 0px #000, 4px 4px 0px #000, 3px 3px 0px #000,2px 2px 0px #000, 1px 1px 0px #000 ;
+}
+
+#wrap {
+/*    background: url(../images/bg.jpg) scroll no-repeat white;*/
+    width: 960px;
+    min-height: 900px;
+    margin: 0 auto;
+    position: absolute;
+    left: 12%;
+    z-index: 10;
+}
+
+canvas {
+    cursor: none;
+    position: relative;
+    left: 50%;
+    margin-left: -350px;
+    z-index: 50;
+}
+
+#countdown {
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    top: 178px;
+    left: 48%;
+    font-size: 72.5px;
+    z-index: 100;
+}
