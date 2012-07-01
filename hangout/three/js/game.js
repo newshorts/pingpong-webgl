@@ -16,8 +16,6 @@ var Game = Class.extend({
             this.setCustomMessaging();
         }
         
-        window.addEventListener('mousemove', this.updateMouse, false);
-        
         var start = document.getElementById('start'),
             stop = document.getElementById('stop'),
             pause = document.getElementById('pause');
@@ -25,6 +23,8 @@ var Game = Class.extend({
         start.addEventListener('click', this.start, false);
         stop.addEventListener('click', this.stop, false);
         pause.addEventListener('click', this.pause, false);
+        
+        window.addEventListener('mousemove', this.updateMouse, false);
     },
     listenGapiState: function() {
         gapi.hangout.data.onStateChanged.add(function() {
@@ -41,6 +41,8 @@ var Game = Class.extend({
     updateMouse: function(evt) {
         mouseX = evt.x;
         mouseY = evt.y;
+        
+//        console.log('mouseX: ' + (mouseX - 700));
     },
     getPid: function() {
         if(typeof gapi != 'undefined') {
@@ -72,7 +74,8 @@ var Game = Class.extend({
         this.startCountdown();
     },
     startCountdown: function() {
-        $('#countdown').text(this.countdown);
+        var cd = $('#countdown');
+        cd.text(this.countdown);
 
         if(this.countdown >= 1) {
             
@@ -83,8 +86,7 @@ var Game = Class.extend({
                 self.startCountdown();
             }, 1000);
         } else {
-            
-            
+            cd.hide();
             this.start();
         }
     },

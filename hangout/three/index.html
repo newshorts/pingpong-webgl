@@ -34,14 +34,14 @@ Other ideas for hangout games - zombies vs cow or blog tag with friends.
             var bounds = {
                 x: 700,
                 y: 460,
-                z: 1000
+                z: 1200
             };
 
             var paddleBounds = 400;
 
             var game = new Game();
-            var scene = new Scene();
-            var ball = new Ball(bounds, paddleBounds);
+            var scene = new Scene(bounds);
+            var ball = new Ball(bounds, paddleBounds, scene.radius);
             
             (function($) {
                 $(window).load(function() {
@@ -57,18 +57,18 @@ Other ideas for hangout games - zombies vs cow or blog tag with friends.
 //                        var mouseX = mouseX,
 //                            mouseY = mouseY;
         
-                        scene.mouse.position.set(-(mouseX - scene.bounds.x), (mouseY - scene.bounds.y/2), (scene.bounds.z * 0.15));
+                        scene.mouse.position.set(-(mouseX - scene.bounds.x), (mouseY - scene.bounds.y/2), (scene.bounds.z * 0.50));
                         var pos = ball.getUpdate();
                         scene.updateBall(pos);
                         scene.renderer.render( scene.scene, scene.camera );
                         
-
                     }
 
                     animate();
                     
                     game.countdown = 5;
                     game.startCountdown();
+                    
                 });
             })(jQuery);
                     

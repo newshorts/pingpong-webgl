@@ -10,6 +10,10 @@ root {
     display: block;
 }
 
+body {
+    background-color: white;
+}
+
 canvas {
     cursor: none;
     position: relative;

@@ -18,18 +18,20 @@ var Ball = Class.extend({
     x: 20,
     y: 20,
     z: 20,
-    r: 100,
+    r: 0,
     color: '0xFFFFFF',
     theta: 0.0, 
     gravity: 0.9, 
     damping: 1,
     gravityOn: true,
-    init: function(_bounds, paddleBounds){
+    init: function(_bounds, paddleBounds, radius){
         this.bounds.x = _bounds.x;
         this.bounds.y = _bounds.y;
         this.bounds.z = _bounds.z;
         
         this.paddleBounds = paddleBounds;
+        
+        this.r = radius;
         
     },
     getUpdate: function() {
@@ -41,7 +43,7 @@ var Ball = Class.extend({
 
         var pos = {
             x: this.x,
-            y: this.y,
+            y: (this.y - this.r),
             z: this.z
         }
         
@@ -57,7 +59,7 @@ var Ball = Class.extend({
         this.z = 20;
     },
     start: function() {
-        this.velocity.x = 1,
+        this.velocity.x = -1,
         this.velocity.y = 1,
         this.velocity.z = Math.floor(Math.random()*20 + 1);
     },
@@ -68,7 +70,9 @@ var Ball = Class.extend({
     },
     wallCollision: function() {
         
-        if(this.x > this.bounds.x/2 || this.x < -(this.bounds.x/2)) {
+//        console.log('x pos: ' + (this.x));
+        
+        if((this.x + this.r) > this.bounds.x/2 || (this.x - this.r) < -(this.bounds.x/2)) {
             this.velocity.x *= -1;
         }
 
@@ -85,32 +89,32 @@ var Ball = Class.extend({
             }
         }
 
-        if(this.z > this.bounds.z/2) {
+        if((this.z - this.r) > this.bounds.z/2) {
             
-            var paddleX = (-(mouseX - Math.abs(this.bounds.x)))*0.36,
-                paddleY = (mouseY - this.bounds.y);
-                
+            // the paddle position is opposit the x position because we rotated the whole scene 180 degrees around the y axis
+            var paddleX = -(mouseX - 700);
+            
             var upperX = paddleX + (scene.paddleBounds/2),
-                lowerX = paddleX - (scene.paddleBounds/2),
-                upperY = paddleY + (scene.paddleBounds/2),
-                lowerY = paddleY - (scene.paddleBounds/2);
-            
+                lowerX = paddleX - (scene.paddleBounds/2);
+                
+            console.log('mouseX: ' + -(mouseX-700) + ' x: ' + this.x);
+                
             // just playing x - dont worry about y: (y < upperY && y > lowerY)
-            if((this.x < upperX && this.x > lowerX)) {
+            if((this.x < upperX) && (this.x > lowerX) ) {
 
                 this.velocity.z *= -1;
-                
                 game.sendState('hit');
                 
             } else {
                 // we lost, reset the game
                 game.reset();
                 game.sendState('miss');
+                
             }
 
         }
 
-        if(this.z < -(this.bounds.z/2)) {
+        if((this.z - this.r) < -(this.bounds.z/2)) {
 
             this.velocity.z *= -1;
             
