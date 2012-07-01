@@ -1,126 +1,123 @@
-var Ball = function(bnds) {
-                
-    var bounds = {
-        x: bnds.x,
-        y: bnds.y,
-        z: bnds.z
-    };
+/* 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
-    var velocity = {
-        x: 1,
-        y: 1,
-        z: -20
-    };
 
-    var x = 20,
-        y = 20,
-        z = 20,
-        r = 100;
+var Ball = Class.extend({
+    bounds: {
+        x: 0,
+        y: 0,
+        z: 0
+    },
+    velocity: {
+        x: 0,
+        y: 0,
+        z: 0
+    },
+    x: 20,
+    y: 20,
+    z: 20,
+    r: 100,
+    color: '0xFFFFFF',
+    theta: 0.0, 
+    gravity: 0.9, 
+    damping: 1,
+    gravityOn: true,
+    init: function(_bounds, paddleBounds){
+        this.bounds.x = _bounds.x;
+        this.bounds.y = _bounds.y;
+        this.bounds.z = _bounds.z;
+        
+        this.paddleBounds = paddleBounds;
+        
+    },
+    getUpdate: function() {
+        this.wallCollision();
 
-    var color = '0xFFFFFF';
-
-    var theta = 0.0, gravity = 0.9, damping = 1;
-
-    var gravityOn = true;
-
-    this.update = function() {
-        wallCollision();
-
-        x += velocity.x;
-        y += velocity.y;
-        z += velocity.z;
+        this.x += this.velocity.x;
+        this.y += this.velocity.y;
+        this.z += this.velocity.z;
 
         var pos = {
-            x: x,
-            y: y,
-            z: z
+            x: this.x,
+            y: this.y,
+            z: this.z
         }
-
+        
         return pos;
-
-    }
-
-    var wallCollision = function() {
-        if(x > bounds.x/2 || x < -(bounds.x/2)) {
-            velocity.x *= -1;
+    },
+    reset: function() {
+        this.velocity.x = 0,
+        this.velocity.y = 0,
+        this.velocity.z = 0;
+        
+        this.x = 20;
+        this.y = 20;
+        this.z = 20;
+    },
+    start: function() {
+        this.velocity.x = 1,
+        this.velocity.y = 1,
+        this.velocity.z = Math.floor(Math.random()*20 + 1);
+    },
+    pause: function() {
+        this.velocity.x = 0,
+        this.velocity.y = 0,
+        this.velocity.z = 0;
+    },
+    wallCollision: function() {
+        
+        if(this.x > this.bounds.x/2 || this.x < -(this.bounds.x/2)) {
+            this.velocity.x *= -1;
         }
 
-        if(gravityOn) {
-            velocity.y += gravity;
-            if(y > bounds.y/2) {
-                velocity.y *= -0.95;
-                y = bounds.y/2;
+        if(this.gravityOn) {
+            this.velocity.y += this.gravity;
+            if(this.y > this.bounds.y/2) {
+                this.velocity.y *= -0.95;
+                this.y = this.bounds.y/2;
             }
         } else {
-            if(y > (bounds.y/2) || y < -(bounds.y/2)) {
-                velocity.y *= -1;
-                velocity.y *= damping;
+            if(this.y > (this.bounds.y/2) || this.y < -(this.bounds.y/2)) {
+                this.velocity.y *= -1;
+                this.velocity.y *= this.damping;
             }
         }
 
-        if(z > bounds.z/2) {
+        if(this.z > this.bounds.z/2) {
             
-            var paddleX = (-(mouseX - Math.abs(bounds.x)))*0.36,
-                paddleY = (mouseY - bounds.y);
+            var paddleX = (-(mouseX - Math.abs(this.bounds.x)))*0.36,
+                paddleY = (mouseY - this.bounds.y);
                 
-            var upperX = paddleX + (paddleBounds/2),
-                lowerX = paddleX - (paddleBounds/2),
-                upperY = paddleY + (paddleBounds/2),
-                lowerY = paddleY - (paddleBounds/2);
+            var upperX = paddleX + (scene.paddleBounds/2),
+                lowerX = paddleX - (scene.paddleBounds/2),
+                upperY = paddleY + (scene.paddleBounds/2),
+                lowerY = paddleY - (scene.paddleBounds/2);
             
             // just playing x - dont worry about y: (y < upperY && y > lowerY)
-            if((x < upperX && x > lowerX)) {
-//                window.dispatchEvent(winner);
-                if(gameOn) {
-                    
-                    var pid = gapi.hangout.getParticipantId() || 'wall';
-                    gapi.hangout.data.setValue('action', 'hit');
-                    gapi.hangout.data.setValue('player', pid);
-                    
-                }
+            if((this.x < upperX && this.x > lowerX)) {
+
+                this.velocity.z *= -1;
                 
-                velocity.z *= -1;
+                game.sendState('hit');
                 
             } else {
                 // we lost, reset the game
-                
-                if(gameOn) {
-                    
-                    var pid = gapi.hangout.getParticipantId() || 'wall';
-                    
-                    if(st.action != "hit" && st.player != pid) {
-                        gapi.hangout.data.setValue('action', 'miss');
-                        gapi.hangout.data.setValue('player', pid);
-                    }
-                    
-                }
-                
-//                velocity.z *= -1;
-                
+                game.reset();
+                game.sendState('miss');
             }
 
         }
 
-        if(z < -(bounds.z/2)) {
+        if(this.z < -(this.bounds.z/2)) {
 
-            // just for debugging, remove when I test with real players
-            if(gameOn) {
-
-                var st = gapi.hangout.data.getState();
-
-                console.dir(st);
-
-                if(st.action != "hit" && st.player != "wall") {
-                    gapi.hangout.data.setValue('action', 'hit');
-                    gapi.hangout.data.setValue('player', 'wall');
-                }
-
-                velocity.z *= -1;
-
-            }
+            this.velocity.z *= -1;
+            
+            game.sendState('hit');
             
         }
 
     }
-
-}
+    
+});

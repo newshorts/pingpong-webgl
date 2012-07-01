@@ -15,4 +15,15 @@ canvas {
     position: relative;
     left: 50%;
     margin-left: -350px;
+    z-index: 50;
+}
+
+#countdown {
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    top: 100px;
+    left: 40%;
+    font-size: 48px;
+    z-index: 100;
 }

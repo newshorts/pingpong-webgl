@@ -9,15 +9,23 @@ if(isset($_GET['hangout'])) {
     
     $style = file_get_contents('three/css/style.css');
     
-    $app = file_get_contents('three/js/app.js');
-    
-    $three = file_get_contents('three/js/Three.js');
-    
+    $three = file_get_contents('three/js/three.js');
+    $class = file_get_contents('three/js/class.js');
+    $game = file_get_contents('three/js/game.js');
+    $scene = file_get_contents('three/js/scene.js');
     $ball = file_get_contents('three/js/ball.js');
     
+//    $app = file_get_contents('three/js/app.js');
+//    
+//    $three = file_get_contents('three/js/Three.js');
+//    
+//    $ball = file_get_contents('three/js/ball.js');
+    
     $replace = array(   '<link rel="stylesheet" type="text/css" href="css/style.css" />' => $style, 
-                        '<script src="js/app.js"></script>' => $app, 
-                        '<script src="js/Three.js"></script>' => $three, 
+                        '<script src="js/three.js"></script>' => $three, 
+                        '<script src="js/class.js"></script>' => $class, 
+                        '<script src="js/game.js"></script>' => $game, 
+                        '<script src="js/scene.js"></script>' => $scene,
                         '<script src="js/ball.js"></script>' => $ball
                     );
     
