@@ -6,7 +6,7 @@
         Purpose of the stylesheet follows.
 */
 
-@import url(http://fonts.googleapis.com/css?family=Bevan);
+@import url(https://fonts.googleapis.com/css?family=Bevan);
 
 root { 
     display: block;
@@ -16,8 +16,8 @@ body {
     background-color: white;
     font-family: 'Bevan', serif;
     font-size: 16.5px;
-    color: #2E2E2E;
-    text-shadow: 5px 5px 0px #000, 4px 4px 0px #000, 3px 3px 0px #000,2px 2px 0px #000, 1px 1px 0px #000 ;
+    color: #eee;
+    text-shadow: 5px 5px 0px #444, 4px 4px 0px #444, 3px 3px 0px #333,2px 2px 0px #333, 1px 1px 0px #222 ;
 }
 
 #wrap {

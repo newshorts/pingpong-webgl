@@ -40,7 +40,6 @@ var Scene = Class.extend({
         this.bounds.y = _bounds.y;
         this.bounds.z = _bounds.z;
         
-        
         this.scene = new THREE.Scene();
         this.scene.fog = new THREE.Fog( 0x000000, 1500, 4000);
 
@@ -58,17 +57,6 @@ var Scene = Class.extend({
         this.room = new THREE.Mesh( this.boxGeometry, this.boxMaterial );
         this.scene.add( this.room );
         
-        // FLOOR
-        
-        this.floorGeometry = new THREE.CubeGeometry( this.bounds.x, 10, this.bounds.z );
-        this.floorMaterial = new THREE.MeshBasicMaterial({map:THREE.ImageUtils.loadTexture('images/pingpongtable.jpg'), shading: THREE.SmoothShading, overdraw: true});
-        this.floorMaterial.map.needsUpdate = true;
-        this.floor = new THREE.Mesh( this.floorGeometry, this.floorMaterial );
-        this.floor.overdraw = true;
-        this.scene.add( this.floor );
-        this.floor.position.set(0, 235, 0);
-        this.floor.rotation.x = Math.PI;
-
         // BALL
 
         this.ballGeometry = new THREE.SphereGeometry( this.radius, 32, 16 );
@@ -104,20 +92,26 @@ var Scene = Class.extend({
         this.renderer.setClearColor(this.scene.fog.color, 1);
         this.renderer.autoClear = false;
         
-        var textureImg = new Image();
-        var self = this;
-        textureImg.onload = function(){
-            document.body.appendChild( self.renderer.domElement );
-        };
-        textureImg.src = "images/pingpongtable.jpg";
-
+        document.body.appendChild( this.renderer.domElement );
         
-
     },
     updateBall: function(pos) {
         this.ball.position.set(pos.x, pos.y, pos.z);
         this.ball.rotation.x += 0.01;
         this.ball.rotation.y += 0.02;
+    },
+    addTable: function() {
+        
+        // FLOOR
+        
+        this.floorGeometry = new THREE.CubeGeometry( this.bounds.x, 10, this.bounds.z );
+        this.floorMaterial = new THREE.MeshBasicMaterial({map:THREE.ImageUtils.loadTexture(table), shading: THREE.SmoothShading, overdraw: true});
+        this.floorMaterial.map.needsUpdate = true;
+        this.floor = new THREE.Mesh( this.floorGeometry, this.floorMaterial );
+        this.floor.overdraw = true;
+        this.scene.add( this.floor );
+        this.floor.position.set(0, 235, 0);
+        this.floor.rotation.x = Math.PI;
     }
     
 });
