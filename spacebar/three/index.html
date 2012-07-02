@@ -60,30 +60,13 @@ Other ideas for hangout games - zombies vs cow or blog tag with friends.
 
             }
 
-
-
-//                    animate();
-
-            
-            
-            var table = document.createElement('img');
-            table.src = 'https://s3.amazonaws.com/GSP/google/hangouts/pingpong/spacebar/three/images/pingpongtable.jpg';
-            table.onload = function(evt){
-                console.dir(table);
-                scene.addTable(table);
-                animate();
-                game.countdown = 5;
-                game.startCountdown();
-            };
-
-
-
-
             (function($) {
                 $(window).load(function() {
                     // start the app here
 
-                    
+                    animate();
+                    game.countdown = 5;
+                    game.startCountdown();
                     
                 });
             })(jQuery);

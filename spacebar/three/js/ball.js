@@ -143,10 +143,12 @@ var Ball = Class.extend({
             
             var responseTime = (maxBoundary - this.z);
             
-            console.log(responseTime)
-            
             this.velocity.z *= -1;
-            this.velocity.x *= (1/responseTime) + 1.3;
+//            this.velocity.x *= (1/(responseTime * 10)) + 1;
+            var rand = Math.random()*100 + 1;
+            var neg = (rand > 60) ? -1 : 1;
+            this.velocity.x = neg * (Math.random()*(0.03 * responseTime) + 1);
+            console.log(this.velocity.x)
             
         }
         
