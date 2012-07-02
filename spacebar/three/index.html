@@ -6,6 +6,12 @@ Documentation for THREE.js here: http://www.staunsholm.dk/THREE/jsdoc/
 
 Other ideas for hangout games - zombies vs cow or blog tag with friends.
 
+TODO:
+    1. make list of participants with buttons
+    2. onclick the buttons to update the shared state with 'master'
+    3. if I am the master, requestAnimationFrame and animate
+    4. if I am not the master and master is set, requestAnimationFrame and wait for new message
+
 -->
 <!DOCTYPE html>
 <html>
@@ -19,6 +25,7 @@ Other ideas for hangout games - zombies vs cow or blog tag with friends.
             <button id="start">Start</button>
             <button id="stop">Stop</button>
             <button id="pause">Pause</button>
+            <div id="participants"></div>
         </div>
         <div id="countdown"></div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
@@ -28,6 +35,9 @@ Other ideas for hangout games - zombies vs cow or blog tag with friends.
         <script src="js/game.js"></script>
         <script src="js/scene.js"></script>
         <script src="js/ball.js"></script>
+        <script src="js/master.js"></script>
+        <script src="js/masterView.js"></script>
+        
         <script>
             var mouseX, mouseY;
             
@@ -40,38 +50,69 @@ Other ideas for hangout games - zombies vs cow or blog tag with friends.
             var paddleBounds = 400;
             
             var game = new Game();
+            var master, masterview;
             var scene = new Scene(bounds);
             var ball = new Ball(bounds, paddleBounds, scene.radius);
             
-            function animate() {
-                // note: three.js includes requestAnimationFrame shim
-                requestAnimationFrame( animate );
-                render();
-            }
-
-            function render() {
-//                        var mouseX = mouseX,
-//                            mouseY = mouseY;
-
-                scene.mouse.position.set(-(mouseX - scene.bounds.x), (mouseY - scene.bounds.y/2), (scene.bounds.z * 0.50));
-                var pos = ball.getUpdate();
-                scene.updateBall(pos);
-                scene.renderer.render( scene.scene, scene.camera );
-
-            }
-
             (function($) {
                 $(window).load(function() {
-                    // start the app here
+                    
+                   if(typeof gapi != 'undefined') {
+                        gapi.hangout.onApiReady.add(function(evt) {
+                            
+                            console.dir(evt)
+                            
+                            master = new Master();
+                            masterview = new MasterView();
+                            
+                            game.listenStateChange();
+                            game.listenMessage();
+                            
+                            gapi.hangout.data.setValue('gameOn', 'true');
+                            
+                            function animate() {
+                                // note: three.js includes requestAnimationFrame shim
+                                requestAnimationFrame( animate );
 
-                    animate();
-                    game.countdown = 5;
-                    game.startCountdown();
+                                if(master.iamthemaster) {
+                                    render();
+                                } else {
+                                    renderPassive();
+                                }
+
+                            }
+
+                            function renderPassive() {
+                                scene.mouse.position.set(-(mouseX - scene.bounds.x), (mouseY - scene.bounds.y/2), (scene.bounds.z * 0.50));
+                                // we don't update the ball position directly, we wait for a new message then update ball
+                                scene.renderer.render( scene.scene, scene.camera );
+                            }
+
+                            function render() {
+                                scene.mouse.position.set(-(mouseX - scene.bounds.x), (mouseY - scene.bounds.y/2), (scene.bounds.z * 0.50));
+                                var pos = ball.getUpdate();
+                                scene.updateBall(pos);
+                                scene.renderer.render( scene.scene, scene.camera );
+                                gapi.hangout.data.sendMessage(JSON.stringify(pos));
+                            }
+                            
+                            animate();
+                            game.countdown = 5;
+                            game.startCountdown();
+                            
+                            console.log('inside window load')
+                            console.dir(game)
+                            console.dir(scene)
+                            console.dir(ball)
+                            console.dir(master)
+                            console.dir(masterview)
+                            
+                        });
+                    } 
                     
                 });
             })(jQuery);
-                    
-            
+              
         </script>
     </body>
 </html>

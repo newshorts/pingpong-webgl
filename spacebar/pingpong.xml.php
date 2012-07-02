@@ -14,13 +14,17 @@ if(isset($_GET['hangout'])) {
     $game = file_get_contents('three/js/game.js');
     $scene = file_get_contents('three/js/scene.js');
     $ball = file_get_contents('three/js/ball.js');
+    $master = file_get_contents('three/js/master.js');
+    $masterView = file_get_contents('three/js/masterView.js');
     
     $replace = array(   '<link rel="stylesheet" type="text/css" href="css/style.css" />' => $style, 
                         '<script src="js/three.js"></script>' => $three, 
                         '<script src="js/class.js"></script>' => $class, 
                         '<script src="js/game.js"></script>' => $game, 
                         '<script src="js/scene.js"></script>' => $scene,
-                        '<script src="js/ball.js"></script>' => $ball
+                        '<script src="js/ball.js"></script>' => $ball,
+                        '<script src="js/master.js"></script>' => $master,
+                        '<script src="js/masterView.js"></script>' => $masterView,
                     );
     
     foreach($replace as $key => $value) {

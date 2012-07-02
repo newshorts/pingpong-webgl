@@ -7,15 +7,6 @@ var Game = Class.extend({
     countdown: 0,
     init: function(){
         
-        if(typeof gapi != 'undefined') {
-            gapi.hangout.onApiReady.add(function(evt) {
-                state.gameOn = true;
-                this.listenGapiState();
-            });
-        } else {
-            this.setCustomMessaging();
-        }
-        
         var start = document.getElementById('start'),
             stop = document.getElementById('stop'),
             pause = document.getElementById('pause');
@@ -26,10 +17,37 @@ var Game = Class.extend({
         
         window.addEventListener('mousemove', this.updateMouse, false);
         window.addEventListener('keypress', this.spacebar, false);
+          
     },
-    listenGapiState: function() {
+    
+    // listens for a game state change, right now it's just master but it could track score
+    listenStateChange: function() {
         gapi.hangout.data.onStateChanged.add(function() {
+            // store an old version of the state
+            var tmpState = this.state;
+            
+            // set new state
             this.state = gapi.hangout.data.getState();
+            console.dir(this.state);
+            
+            // check for the presence of master, if we have it, we set a new one regardless
+            if(typeof this.state.master != 'undefined') {
+                
+                master.setNewMaster();
+                
+            }
+            
+        });
+        
+    },
+    
+    // expects a message with coordinates of ball position
+    listenMessage: function() {
+        gapi.hangout.data.onMessageReceived.add(function(evt) {
+            console.dir(evt);
+            var pos = JSON.parse(evt.message);
+            console.dir(pos);
+            scene.updateBall(pos);
         });
     },
     setCustomMessaging: function() {
@@ -126,7 +144,6 @@ var Game = Class.extend({
         }
         
         return false;
-        
     }
     
 });
