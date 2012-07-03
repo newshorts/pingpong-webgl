@@ -26,6 +26,7 @@ TODO:
             <button id="stop">Stop</button>
             <button id="pause">Pause</button>
             <div id="participants"></div>
+            <div id="faceTracking"></div>
         </div>
         <div id="countdown"></div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
@@ -37,6 +38,7 @@ TODO:
         <script src="js/ball.js"></script>
         <script src="js/master.js"></script>
         <script src="js/masterView.js"></script>
+        <script src="js/faceTracking.js"></script>
         
         <script>
             var mouseX, mouseY;
@@ -49,10 +51,12 @@ TODO:
 
             var paddleBounds = 400;
             
-            var game = new Game();
-            var master, masterview;
-            var scene = new Scene(bounds);
-            var ball = new Ball(bounds, paddleBounds, scene.radius);
+            var game, master, masterview, scene, ball, facetracking;
+            
+//            var game = new Game();
+//            var master, masterview;
+//            var scene = new Scene(bounds);
+//            var ball = new Ball(bounds, paddleBounds, scene.radius);
             
             (function($) {
                 $(window).load(function() {
@@ -60,10 +64,12 @@ TODO:
                    if(typeof gapi != 'undefined') {
                         gapi.hangout.onApiReady.add(function(evt) {
                             
-                            console.dir(evt)
-                            
+                            game = new Game();
+                            scene = new Scene(bounds);
+                            ball = new Ball(bounds, paddleBounds, scene.radius);
                             master = new Master();
                             masterview = new MasterView();
+                            facetracking = new FaceTracking();
                             
                             game.listenStateChange();
                             game.listenMessage();
@@ -83,13 +89,15 @@ TODO:
                             }
 
                             function renderPassive() {
-                                scene.mouse.position.set(-(mouseX - scene.bounds.x), (mouseY - scene.bounds.y/2), (scene.bounds.z * 0.50));
+//                                scene.mouse.position.set(-(mouseX - scene.bounds.x), (mouseY - scene.bounds.y/2), (scene.bounds.z * 0.50));
+                                scene.renderMousePosition();
                                 // we don't update the ball position directly, we wait for a new message then update ball
                                 scene.renderer.render( scene.scene, scene.camera );
                             }
 
                             function render() {
-                                scene.mouse.position.set(-(mouseX - scene.bounds.x), (mouseY - scene.bounds.y/2), (scene.bounds.z * 0.50));
+//                                scene.mouse.position.set(-(mouseX - scene.bounds.x), (mouseY - scene.bounds.y/2), (scene.bounds.z * 0.50));
+                                scene.renderMousePosition();
                                 var pos = ball.getUpdate();
                                 scene.updateBall(pos);
                                 scene.renderer.render( scene.scene, scene.camera );
@@ -106,8 +114,10 @@ TODO:
                             console.dir(ball)
                             console.dir(master)
                             console.dir(masterview)
-                            
+//                            console.dir(facetracking)
+
                         });
+                        
                     } 
                     
                 });

@@ -16,6 +16,7 @@ if(isset($_GET['hangout'])) {
     $ball = file_get_contents('three/js/ball.js');
     $master = file_get_contents('three/js/master.js');
     $masterView = file_get_contents('three/js/masterView.js');
+    $faceTracking = file_get_contents('three/js/faceTracking.js');
     
     $replace = array(   '<link rel="stylesheet" type="text/css" href="css/style.css" />' => $style, 
                         '<script src="js/three.js"></script>' => $three, 
@@ -25,6 +26,7 @@ if(isset($_GET['hangout'])) {
                         '<script src="js/ball.js"></script>' => $ball,
                         '<script src="js/master.js"></script>' => $master,
                         '<script src="js/masterView.js"></script>' => $masterView,
+                        '<script src="js/faceTracking.js"></script>' => $faceTracking
                     );
     
     foreach($replace as $key => $value) {

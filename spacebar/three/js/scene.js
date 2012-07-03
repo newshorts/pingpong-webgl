@@ -116,6 +116,9 @@ var Scene = Class.extend({
         this.ball.position.set(pos.x, pos.y, pos.z);
         this.ball.rotation.x += 0.01;
         this.ball.rotation.y += 0.02;
+    },
+    renderMousePosition: function() {
+        this.mouse.position.set(-(mouseX - this.bounds.x), (mouseY - this.bounds.y/2), (this.bounds.z * 0.50));
     }
 });
 

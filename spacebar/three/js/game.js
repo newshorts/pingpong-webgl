@@ -32,13 +32,9 @@ var Game = Class.extend({
             
             // check for the presence of master, if we have it, we set a new one regardless
             if(typeof this.state.master != 'undefined') {
-                
                 master.setNewMaster();
-                
             }
-            
         });
-        
     },
     
     // expects a message with coordinates of ball position
@@ -54,14 +50,14 @@ var Game = Class.extend({
         var hit = document.createEvent('Event');
         hit.initEvent('hit', true, true);
         
-        var miss = document.createEvent('Event');  
+        var miss = document.createEvent('Event');
         miss.initEvent('miss', true, true);
     },
     updateMouse: function(evt) {
-        mouseX = evt.x;
-        mouseY = evt.y;
-        
-//        console.log('mouseX: ' + (mouseX - 700));
+        if(!facetracking.tracking) {
+            mouseX = evt.x;
+            mouseY = evt.y;
+        }
     },
     getPid: function() {
         if(typeof gapi != 'undefined') {
